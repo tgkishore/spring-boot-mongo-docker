@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+ build:
+   machine:
+    image: ubuntu-2204:2022.04.2
+   steps:
+     - checkout
+     # start proprietary DB using private Docker image
+     # with credentials stored in the UI
+     #- run: |
+        # echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+         # docker run -d --name db company/proprietary-db:1.2.3
+
+     # build the application image
+     - run: mvn clean package 
+     - run: docker login -u gopitgk -p dckr_pat_8jeJGKuvH_6RPgWaCdzd08Dex2k
+     - run: docker build -t gopitgk/circleci-test .
+
+     # deploy the image
+     
+     - run: docker push gopitgk/circleci-test
+
